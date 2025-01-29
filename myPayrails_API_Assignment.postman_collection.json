@@ -1,0 +1,217 @@
+{
+	"info": {
+		"_postman_id": "9dae4223-4747-4be0-8227-067ad58adb3e",
+		"name": "Alpha Vantage API Tests",
+		"description": "Test collection for Alpha Vantage API endpoints focusing on TIME_SERIES_DAILY and GLOBAL_QUOTE endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25660722"
+	},
+	"item": [
+		{
+			"name": "Time Series Daily",
+			"item": [
+				{
+					"name": "Get Daily Time Series - Success",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response contains Time Series data\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData[\"Time Series (Daily)\"]).to.exist;",
+									"});",
+									"",
+									"pm.test(\"Response time is acceptable\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/query?function=TIME_SERIES_DAILY&symbol={{stockSymbol}}&apikey={{apiKey}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"query"
+							],
+							"query": [
+								{
+									"key": "function",
+									"value": "TIME_SERIES_DAILY"
+								},
+								{
+									"key": "symbol",
+									"value": "{{stockSymbol}}"
+								},
+								{
+									"key": "apikey",
+									"value": "{{apiKey}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Daily Time Series - Invalid Symbol",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Error message exists for invalid symbol\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData[\"Error Message\"]).to.exist;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/query?function=TIME_SERIES_DAILY&symbol=INVALID&apikey={{apiKey}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"query"
+							],
+							"query": [
+								{
+									"key": "function",
+									"value": "TIME_SERIES_DAILY"
+								},
+								{
+									"key": "symbol",
+									"value": "INVALID"
+								},
+								{
+									"key": "apikey",
+									"value": "{{apiKey}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Global Quote",
+			"item": [
+				{
+					"name": "Get Global Quote - Success",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response contains Global Quote data\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData[\"Global Quote\"]).to.exist;",
+									"});",
+									"",
+									"pm.test(\"Global Quote contains required fields\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var quote = jsonData[\"Global Quote\"];",
+									"    pm.expect(quote[\"01. symbol\"]).to.exist;",
+									"    pm.expect(quote[\"05. price\"]).to.exist;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/query?function=GLOBAL_QUOTE&symbol={{stockSymbol}}&apikey={{apiKey}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"query"
+							],
+							"query": [
+								{
+									"key": "function",
+									"value": "GLOBAL_QUOTE"
+								},
+								{
+									"key": "symbol",
+									"value": "{{stockSymbol}}"
+								},
+								{
+									"key": "apikey",
+									"value": "{{apiKey}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://www.alphavantage.co"
+		},
+		{
+			"key": "stockSymbol",
+			"value": "IBM",
+			"type": "string"
+		},
+		{
+			"key": "api_key",
+			"value": "Demo123",
+			"type": "string"
+		}
+	]
+}
